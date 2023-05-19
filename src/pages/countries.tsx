@@ -25,7 +25,7 @@ export default function Home() {
     }
     });
 
-    xhr.open("GET", API_ENDPOINT+"/api/live-events/tournaments_stages");
+    xhr.open("GET", API_ENDPOINT+"/live-events/tournaments_stages");
 
     xhr.send();
 
