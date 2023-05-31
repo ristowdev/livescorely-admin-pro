@@ -58,6 +58,30 @@ export default function Home() {
   }
 
 
+
+  const handleStageTypeChange = (event_id: string, stage: string, stage_type: string) => {
+    var data = JSON.stringify({
+        "event_id": event_id,
+        "stage": stage,
+        "stage_type": stage_type
+      });
+      
+      var xhr = new XMLHttpRequest();
+      xhr.withCredentials = false;
+      
+      xhr.addEventListener("readystatechange", function() {
+        if(this.readyState === 4) {
+          console.log(this.responseText);
+          router.reload()
+        }
+      });
+      
+      xhr.open("PUT", API_ENDPOINT+"/live-events/change-event-stage-type");
+      xhr.setRequestHeader("Content-Type", "application/json");
+      
+      xhr.send(data);
+  }
+
   const handleStageChange = (event_id: string, stage: string) => {
     var data = JSON.stringify({
         "event_id": event_id,
@@ -70,6 +94,7 @@ export default function Home() {
       xhr.addEventListener("readystatechange", function() {
         if(this.readyState === 4) {
           console.log(this.responseText);
+          router.reload()
         }
       });
       
@@ -78,6 +103,7 @@ export default function Home() {
       
       xhr.send(data);
   }
+
   return (
     <>
       <Head>
@@ -408,6 +434,23 @@ export default function Home() {
                                         fontSize:'15px'
                                     }}
                                 >Manipulate event:</span>
+
+                                <button
+                                    style={{
+                                        width:'150px',
+                                        height:'40px',
+                                        cursor:'pointer',
+                                        background:'black',
+                                        outline:'none',
+                                        border:'none',
+                                        borderRadius:'5px',
+                                        // marginTop:'10px', 
+                                    }}
+                                    onClick={()=>{handleStageTypeChange(liveFakeEvents?.event?._id, "FIRST_HALF", "LIVE")}}
+                                >
+                                    START 1ST HALF
+                                </button>
+
                                 <button
                                     style={{
                                         width:'150px',
@@ -416,7 +459,8 @@ export default function Home() {
                                         background:'red',
                                         outline:'none',
                                         border:'none',
-                                        borderRadius:'5px'
+                                        borderRadius:'5px',
+                                        marginTop:'10px', 
                                     }}
                                     onClick={()=>{handleStageChange(liveFakeEvents?.event?._id, "HALF_TIME")}}
                                 >
@@ -436,7 +480,7 @@ export default function Home() {
                                     }}
                                     onClick={()=>{handleStageChange(liveFakeEvents?.event?._id, "SECOND_HALF")}}
                                 >
-                                    SET SECOND HALF
+                                    START 2ND HALF
                                 </button>
 
                                 <button
@@ -499,9 +543,9 @@ export default function Home() {
                                         borderRadius:'5px',
                                         marginTop:'10px'
                                     }}
-                                    onClick={()=>{handleStageChange(liveFakeEvents?.event?._id, "FULL_TIME")}}
+                                    onClick={()=>{handleStageTypeChange(liveFakeEvents?.event?._id, "FINISHED", "FINISHED")}}
                                 >
-                                    SET FULL TIME
+                                    END MATCH
                                 </button>
 
                                 <button

@@ -38,7 +38,11 @@ export default function AddSubModal(props: IAddSubModalProps) {
        
             // const incident_time = 0;
             const currentTime = Math.floor(Date.now() / 1000); // Convert current time to Unix timestamp in seconds
-            const elapsedTime = currentTime - liveFakeEvents.event.stage_start_time; // Calculate elapsed time in seconds
+            // const elapsedTime = currentTime - liveFakeEvents.event.stage_start_time; // Calculate elapsed time in seconds
+            let elapsedTime = currentTime - liveFakeEvents.event.stage_start_time; // Calculate elapsed time in seconds
+            if(liveFakeEvents.event.stage === "SECOND_HALF"){
+                elapsedTime = elapsedTime + 2700;
+            }
             const incident_time = Math.floor(elapsedTime/60);
             const _ev = liveFakeEvents.event;
             console.log(goalTeam)

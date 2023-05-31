@@ -12,6 +12,7 @@ import moment, { Moment } from "moment";
 
 import DateTime from "react-datetime";
 import "react-datetime/css/react-datetime.css";
+import UploadImage from '@/components/uploadImage'
 
 const inter = Inter({ subsets: ['latin'] })
 
@@ -23,6 +24,8 @@ export default function Home() {
   const [homeTeam, setHomeTeam] = useState('');
   const [awayTeam, setAwayTeam] = useState('');
   const [dateTime, setDateTime] = useState<number | null>(null);
+  const [homeTeamImage, setHomeTeamImage] = useState<string>('');
+  const [awayTeamImage, setAwayTeamImage] = useState<string>('');
 
   const homeTeamInput = (event: ChangeEvent<HTMLInputElement>) => {
     setHomeTeam(event.target.value);
@@ -30,8 +33,8 @@ export default function Home() {
   
   const awayTeamInput = (event: ChangeEvent<HTMLInputElement>) => {
     setAwayTeam(event.target.value);
-  };
-
+  }; 
+ 
   const handleAddLeague = () => {
     // WARNING: For POST requests, body is set to null by browsers.
         if(dateTime && homeTeam && awayTeam){ 
@@ -42,9 +45,9 @@ export default function Home() {
                 "start_time": dateTime,
                 "stage_start_time": dateTime,
                 "home_name": homeTeam,
-                "home_image": "",
+                "home_image": homeTeamImage,
                 "away_name": awayTeam,
-                "away_image": ""
+                "away_image": awayTeamImage,
             });
             
             var xhr = new XMLHttpRequest();
@@ -52,7 +55,7 @@ export default function Home() {
             
             xhr.addEventListener("readystatechange", function() {
                 if(this.readyState === 4) {
-                    router.push(`/league/${league}?id=${country_id}?country_name=${country_name}`)
+                    router.push(`/league/${league}?id=${country_id}&country_name=${country_name}`)
                 }
             });
             
@@ -111,7 +114,7 @@ export default function Home() {
                 style={{
                     paddingRight:'20px'
                 }}
-            >Add new live event in: {country_name} - {league} <b><span 
+            >Add new event in: {country_name} - {league} <b><span 
                 style={{
                     textTransform:'uppercase'
                 }}
@@ -157,6 +160,13 @@ export default function Home() {
                     />
                 </div>
 
+                
+                <br/>
+                <UploadImage
+                    caption='Home Team Image'
+                    setImage={setHomeTeamImage}
+                /> 
+
                 <div style={{
                     marginTop:"15px",
                     display:'flex',
@@ -182,6 +192,15 @@ export default function Home() {
                     />
                 </div>
 
+
+
+                <br/>
+                <br/>
+                <UploadImage
+                    caption='Away Team Image'
+                    setImage={setAwayTeamImage}
+                /> 
+
                 <div style={{
                     marginTop:"15px",
                     display:'flex',
@@ -206,6 +225,8 @@ export default function Home() {
                         onChange={awayTeamInput}
                     />
                 </div>
+                <br/>
+
                 <button
                     style={{
                         marginTop:'10px',

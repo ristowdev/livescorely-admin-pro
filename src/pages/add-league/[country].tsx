@@ -8,6 +8,7 @@ import Link from 'next/link'
 import { ChangeEvent, useEffect, useState } from 'react'
 import { useRouter } from 'next/router'
 import { API_ENDPOINT } from '../../../config'
+import UploadImage from '@/components/uploadImage'
 
 const inter = Inter({ subsets: ['latin'] })
 
@@ -16,6 +17,7 @@ export default function Home() {
   const router = useRouter();
   const { country, country_id } = router.query;
  
+  const [image, setImage] = useState('');
   const [leagueName, setLeagueName] = useState('');
 
   const handleInputChange = (event: ChangeEvent<HTMLInputElement>) => {
@@ -25,12 +27,12 @@ export default function Home() {
 
   const handleAddLeague = () => {
     // WARNING: For POST requests, body is set to null by browsers.
-        if(leagueName){
+        if(leagueName && image){
             var data = JSON.stringify({
                 "league_name": leagueName,
                 "league_country": country,
                 "country_id": country_id,
-                "tournament_image": ""
+                "tournament_image": image
             });
             
             var xhr = new XMLHttpRequest();
@@ -110,6 +112,11 @@ export default function Home() {
                     value={leagueName}
                     onChange={handleInputChange}
                 />
+
+                <UploadImage 
+                    caption='Upload league image'
+                    setImage={setImage}
+                /> 
 
                 <button
                     style={{
