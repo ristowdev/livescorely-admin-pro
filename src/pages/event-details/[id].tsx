@@ -104,6 +104,34 @@ export default function Home() {
       xhr.send(data);
   }
 
+  const handleDeleteEvent = (e:any, event_id: string) => {
+    e.preventDefault()
+
+    var confirmation = window.confirm("Are you sure you want to delete this event?");
+
+    if (confirmation) {
+        var data = JSON.stringify({
+            "event_id": event_id, 
+        });
+        
+        var xhr = new XMLHttpRequest();
+        xhr.withCredentials = false;
+        
+        xhr.addEventListener("readystatechange", function() {
+            if(this.readyState === 4) {
+            console.log(this.responseText);
+            router.push("/countries")
+            //   router.reload()
+            }
+        });
+        
+        xhr.open("DELETE", API_ENDPOINT+"/live-events/delete-event");
+        xhr.setRequestHeader("Content-Type", "application/json");
+        
+        xhr.send(data);
+        }
+  }
+
   return (
     <>
       <Head>
@@ -350,17 +378,29 @@ export default function Home() {
                                         }}
                                     > 
 
-                                        <Link href={`/edit-event/${liveFakeEvents?.event?._id}`} style={{marginLeft:'30px'}}>
+                                        {/* <Link href={`/edit-event/${liveFakeEvents?.event?._id}`} style={{marginLeft:'30px'}}> */}
+                                        <button
+                                            onClick={(e)=>{
+                                                handleDeleteEvent(e, liveFakeEvents?.event?._id);
+                                            }}
+                                            style={{
+                                                background:'transparent',
+                                                border:'none',
+                                                cursor:'pointer'
+                                            }}
+                                        >
                                             <span
                                                 style={{
                                                     fontSize:'13px',
                                                     color:'red',
-                                                    textDecoration:'underline'
+                                                    textDecoration:'underline',
+                                                    
                                                 }}
                                             >
                                                 DELETE
                                             </span>
-                                        </Link>
+                                        </button>
+                                        {/* </Link> */}
 
                                     </div>
                                 </div>
@@ -445,6 +485,7 @@ export default function Home() {
                                         border:'none',
                                         borderRadius:'5px',
                                         // marginTop:'10px', 
+                                        color:'white'
                                     }}
                                     onClick={()=>{handleStageTypeChange(liveFakeEvents?.event?._id, "FIRST_HALF", "LIVE")}}
                                 >
@@ -461,6 +502,8 @@ export default function Home() {
                                         border:'none',
                                         borderRadius:'5px',
                                         marginTop:'10px', 
+                                        color:'white'
+
                                     }}
                                     onClick={()=>{handleStageChange(liveFakeEvents?.event?._id, "HALF_TIME")}}
                                 >
@@ -477,6 +520,8 @@ export default function Home() {
                                         border:'none',
                                         borderRadius:'5px',
                                         marginTop:'10px', 
+                                        color:'white'
+
                                     }}
                                     onClick={()=>{handleStageChange(liveFakeEvents?.event?._id, "SECOND_HALF")}}
                                 >
@@ -492,7 +537,9 @@ export default function Home() {
                                         outline:'none',
                                         border:'none',
                                         borderRadius:'5px',
-                                        marginTop:'10px'
+                                        marginTop:'10px',
+                                        color:'white'
+
                                     }}
                                     onClick={()=>{setAddGoalModal(true)}}
                                 >
@@ -509,7 +556,9 @@ export default function Home() {
                                         outline:'none',
                                         border:'none',
                                         borderRadius:'5px',
-                                        marginTop:'10px'
+                                        marginTop:'10px',
+                                        color:'white'
+
                                     }}
                                     onClick={()=>{setAddCardModal(true)}}
                                 >
@@ -525,7 +574,8 @@ export default function Home() {
                                         outline:'none',
                                         border:'none',
                                         borderRadius:'5px',
-                                        marginTop:'10px'
+                                        marginTop:'10px',
+                                        color:'white'
                                     }}
                                     onClick={()=>{setAddSubModal(true)}}
                                 >
@@ -541,7 +591,8 @@ export default function Home() {
                                         outline:'none',
                                         border:'none',
                                         borderRadius:'5px',
-                                        marginTop:'10px'
+                                        marginTop:'10px',
+                                        color:'white'
                                     }}
                                     onClick={()=>{handleStageTypeChange(liveFakeEvents?.event?._id, "FINISHED", "FINISHED")}}
                                 >
@@ -557,7 +608,8 @@ export default function Home() {
                                         outline:'none',
                                         border:'none',
                                         borderRadius:'5px',
-                                        marginTop:'10px'
+                                        marginTop:'10px',
+                                        color:'white'
                                     }}
                                     // onClick={()=>{handleStageChange(liveFakeEvents?.event?._id, "EXTRA_TIME")}}
                                 >

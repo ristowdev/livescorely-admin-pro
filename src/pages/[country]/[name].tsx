@@ -43,6 +43,37 @@ export default function Home() {
       _setCountries(filtered);
     }
   }, [name, countires]);
+
+  const handleDeleteLeague = (e: any, id: number) => { 
+    e.preventDefault()
+    var confirmation = window.confirm("Are you sure you want to delete this league?");
+
+    if (confirmation) {
+        var data = JSON.stringify({
+            "stage_id": id, 
+          });
+          
+          var xhr = new XMLHttpRequest();
+          xhr.withCredentials = false;
+          
+          xhr.addEventListener("readystatechange", function() {
+            if(this.readyState === 4) {
+              console.log(this.responseText);
+            //   router.push("/countries")
+              router.reload()
+            }
+          });
+          
+          xhr.open("DELETE", API_ENDPOINT+"/live-events/delete-stage");
+          xhr.setRequestHeader("Content-Type", "application/json");
+          
+          xhr.send(data);
+      } else {
+        // User clicked Cancel, do nothing 
+      }
+    
+    
+  }
  
 
   return (
@@ -87,15 +118,42 @@ export default function Home() {
             }}>
                 {_countires && _countires[0]?.leagues?.map((league: any)=> (
                     <>
-                        <Link href={`/league/${league?.league_name}?id=${league?.country_id}&country_name=${league.country_name}`}
-                        
+                        <div
+                            style={{
+                                display:'flex'
+                            }}
+                        >
+                            <Link href={`/league/${league?.league_name}?id=${league?.country_id}&country_name=${league.country_name}`}
+                            
                             style={{
                                 color:'blue',
                                 marginBottom:'10px'
                             }}
-                        >
-                            {league.league_name}
-                        </Link>
+                            >
+                                {league.league_name}
+                            </Link>
+                            <div
+                                style={{
+                                    marginLeft:'10px'
+                                }}
+                                >
+                                <button
+                                    style={{
+                                        cursor:'pointer',
+                                        fontSize:11,
+                                        background:'red',
+                                        outline:'none',
+                                        border:'none',
+                                        paddingLeft:1,
+                                        paddingRight:1,
+                                        padding:2,
+                                        borderRadius:3
+                                    }}
+                                    onClick={(e)=>{handleDeleteLeague(e, league.stage_id)}}
+                                >DELETE</button>
+                            </div>
+                            
+                        </div>
                     </>
                 ))}
             </div>

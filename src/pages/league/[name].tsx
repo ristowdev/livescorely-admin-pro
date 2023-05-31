@@ -51,6 +51,34 @@ export default function Home() {
     return `${day}.${month}.${year} ${hours}:${minutes}`;
   }
 
+  const handleDeleteEvent = (e:any, event_id: string) => {
+    e.preventDefault()
+
+    var confirmation = window.confirm("Are you sure you want to delete this event?");
+    if (confirmation) {
+
+        var data = JSON.stringify({
+            "event_id": event_id, 
+        });
+        
+        var xhr = new XMLHttpRequest();
+        xhr.withCredentials = false;
+        
+        xhr.addEventListener("readystatechange", function() {
+            if(this.readyState === 4) {
+            console.log(this.responseText);
+            router.push("/countries")
+            //   router.reload()
+            }
+        });
+        
+        xhr.open("DELETE", API_ENDPOINT+"/live-events/delete-event");
+        xhr.setRequestHeader("Content-Type", "application/json");
+        
+        xhr.send(data);
+        }
+  }
+
   return (
     <>
       <Head>
@@ -298,17 +326,30 @@ export default function Home() {
                                         </span>
                                     </Link>
 
-                                    <Link href={`/edit-event/${live_fake_event._id}`} style={{marginLeft:'30px'}}>
-                                        <span
+                                    {/* <Link href={`/edit-event/${live_fake_event._id}`} style={{marginLeft:'30px'}}> */}
+                                    <button
+                                            onClick={(e)=>{
+                                                handleDeleteEvent(e, live_fake_event._id);
+                                            }}
                                             style={{
-                                                fontSize:'13px',
-                                                color:'red',
-                                                textDecoration:'underline'
+                                                background:'transparent',
+                                                border:'none',
+                                                cursor:'pointer',
+                                                marginLeft:'10px'
                                             }}
                                         >
-                                            DELETE
-                                        </span>
-                                    </Link>
+                                            <span
+                                                style={{
+                                                    fontSize:'13px',
+                                                    color:'red',
+                                                    textDecoration:'underline',
+                                                    
+                                                }}
+                                            >
+                                                DELETE
+                                            </span>
+                                        </button>
+                                    {/* </Link> */}
 
                                 </div>
                             </div>
